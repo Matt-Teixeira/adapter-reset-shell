@@ -1,5 +1,5 @@
 output=$(ifconfig -a)
-adapters=($(echo $output | grep -Po 'en\w+'))
+adapters=($(echo $output | grep -Po 'enx\w+'))
 
 for i in "${adapters[@]}"; do
     adapter_blocks=$(echo $output | grep -Po "${i}.*?collisions")
@@ -12,6 +12,10 @@ for i in "${adapters[@]}"; do
         sudo ifconfig $i up
     # sudo ifconfig $i 192.168.0.2 netmask 255.255.255.0
     fi
+done
+
+
+for i in "${adapters[@]}"; do
     adapter_blocks=$(echo $output | grep -Po "${i}.*?collisions")
     is_connected=$(echo $adapter_blocks | grep -Po 'inet[^\d]')
     if [ $is_connected ]; then
